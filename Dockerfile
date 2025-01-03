@@ -3,7 +3,7 @@ FROM kalilinux/kali-rolling
 # Update dan instal paket yang diperlukan
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y wget sudo dbus fuse-overlayfs iproute2 util-linux busybox
+    apt-get install -y wget sudo dbus fuse-overlayfs iproute2 util-linux busybox tar
 
 # Install ttyd (web terminal)
 RUN wget -qO /bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.x86_64 && \
@@ -38,9 +38,11 @@ RUN mkdir -p /overlay-workdir && \
     chmod +x /overlay-setup.sh
 
 # Install docker binary untuk bypass docker di dalam container
-RUN wget -qO /bin/docker https://download.docker.com/linux/static/stable/x86_64/docker-27.4.1.tgz && \
-    tar -xz -C /bin/ docker && \
-    chmod +x /bin/docker
+RUN wget -qO docker.tgz https://download.docker.com/linux/static/stable/x86_64/docker-24.0.5.tgz && \
+    tar -tzf docker.tgz || { echo "Corrupted tarball, retrying..."; exit 1; } && \
+    tar -xz -C /bin/ -f docker.tgz && \
+    chmod +x /bin/docker && \
+    rm docker.tgz
 
 # Memodifikasi entrypoint untuk mengaktifkan semua trik
 COPY entrypoint.sh /entrypoint.sh
