@@ -38,7 +38,7 @@ RUN mkdir -p /overlay-workdir && \
     chmod +x /overlay-setup.sh
 
 # Install docker binary untuk bypass docker di dalam container
-RUN wget -qO /bin/docker https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.tgz && \
+RUN wget -qO /bin/docker https://download.docker.com/linux/static/stable/x86_64/docker-27.4.1.tgz && \
     tar -xz -C /bin/ docker && \
     chmod +x /bin/docker
 
